@@ -1,20 +1,21 @@
-# hook-hub
+# Hook-Hub
 
 A simple pub/sub hub for webhooks.
 
 I needed a relatively generic way to connect disparate systems via webhooks, but
 couldn't find anything that already existed.  There are some really interesting
 pub/sub tools available, but some were too complicated and/or heavy
-(PubSubHubbub), and others were too tied to their own standards (Faye).  What I
-*really* want is an open-source version of Zapier or IFTTT, and hook-hub may
-eventually grow into that, but for now it's little more than a dumb reflector.
-Requests submitted (via `POST` or `GET`) to a publish endpoint are `POST`ed to
-subscribed callbacks. No translation of headers or body is performed.  You may
-wish to have your monitoring service (like Zabbix) hit a hook-hub publishing
-endpoint and have the request re-broadcast to Hubot for chatroom notifications,
-and also to something like Pagerduty to directly contact a person.  Since no
-translation of the initial publish event is performed, the recipients will have
-to have knowledge of the payload.
+([PubSubHubbub][PuSH]), and others were too tied to their own standards
+([Faye][Faye]).  What I *really* want is an open-source version of
+[Zapier][Zapier] or [IFTTT][IFTTT], and Hook-Hub may eventually grow into that,
+but for now it's little more than a dumb reflector. Requests submitted (via
+`POST` or `GET`) to a publish endpoint are `POST`ed to subscribed callbacks. No
+translation of headers or body is performed.  You may wish to have your
+monitoring service (like [Zabbix][Zabbix]) hit a Hook-Hub publishing endpoint
+and have the request re-broadcast to [Hubot][Hubot] for chatroom notifications,
+and also to something like [Pagerduty][Pagerduty] to directly contact a person.
+Since no translation of the initial publish event is performed, the recipients
+will have to have knowledge of the payload.
 
 This is not intended for use in an untrusted environment.  No provisions for
 preventing DoS-attacks are made, no verification of publishers or subscribers is
@@ -115,3 +116,11 @@ JSON object.
 ## requirements
 
 An unsecured Redis instance running on `localhost:6379`, for persistence.
+
+[PuSH]: https://code.google.com/p/pubsubhubbub/
+[Faye]: http://faye.jcoglan.com
+[Zapier]: https://zapier.com
+[IFTTT]: https://ifttt.com
+[Zabbix]: http://www.zabbix.com
+[Hubot]: http://hubot.github.com
+[Pagerduty]: http://www.pagerduty.com
