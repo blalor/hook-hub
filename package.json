@@ -1,0 +1,28 @@
+{
+    "name": "hook-hub",
+    "version": "0.0.1",
+    "description": "A hub for webhooks",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/blalor/hook-hub.git"
+    },
+    "keywords": [
+        "webhook",
+        "publish",
+        "subscribe",
+        "rest"
+    ],
+    "author": "Brian Lalor <blalor@bravo5.org>",
+    "dependencies": {
+        "assert-plus": "0.1.2",
+        "bunyan": "0.21.3",
+        "node-uuid": "1.4.0",
+        "q": "0.9.4",
+        "redis": "0.8.3",
+        "restify": "2.5.1"
+    }
+}
