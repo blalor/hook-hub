@@ -7,30 +7,36 @@ couldn't find anything that already existed.  There are some really interesting
 pub/sub tools available, but some were too complicated and/or heavy
 ([PubSubHubbub][PuSH]), and others were too tied to their own standards
 ([Faye][Faye]).  What I *really* want is an open-source version of
-[Zapier][Zapier] or [IFTTT][IFTTT], and Hook-Hub may eventually grow into that,
-but for now it's little more than a dumb reflector. Requests submitted (via
-`POST` or `GET`) to a publish endpoint are `POST`ed to subscribed callbacks. No
-translation of headers or body is performed.  You may wish to have your
-monitoring service (like [Zabbix][Zabbix]) hit a Hook-Hub publishing endpoint
-and have the request re-broadcast to [Hubot][Hubot] for chatroom notifications,
-and also to something like [Pagerduty][Pagerduty] to directly contact a person.
-Since no translation of the initial publish event is performed, the recipients
-will have to have knowledge of the payload.
+[Zapier][Zapier] or [IFTTT][IFTTT], and Hook-Hub can eventually grow into that.
+Requests submitted (via `POST` or `GET`) to a publish endpoint are `POST`ed to
+pluggable subscribers. Subscribers can then interface natively with other
+services, reformat and republish to other webhooks, etc.
+
+You may wish to have your monitoring service (like [Zabbix][Zabbix]) hit a Hook-
+Hub publishing endpoint and have the request re-broadcast to [Hubot][Hubot] for
+chatroom notifications, and also to something like [Pagerduty][Pagerduty] to
+directly contact a person.
 
 This is not intended for use in an untrusted environment.  No provisions for
 preventing DoS-attacks are made, no verification of publishers or subscribers is
 attempted, etc.
 
-## tags
+Any number of subscriptions can exist for any set of types and tags.  Publishing
+can also be done via a GET, in which case the query parameters will be converted
+to a JSON object.
 
-Subscriptions are connected to publish events by tags.  When a publish endpoint
-is created, a list of tags is associated.  When a subscription is created, a
-list of tags is provided indicating which types of publish events should be
-received.  Publish endpoints may have more than one tag, and subscriptions may
-be for more than one tag.  All subscribers whose tags intersect with the tags
-associated with the endpoint will receive the publish event.
+## type and tags
 
-## scenario
+Events and subscribers are connected via types and tags.  Each published event
+has a `type` (inherited from the endpoint configuration) and one or more `tags`.
+Each subscriber registers for events of a given type, as well as an optional set
+of tags which -- if provided -- must be a subset of the published event's tags
+in order to be matched.  This is inspired by [Logstash][logstash]'s types and
+tags system for connecting inputs, filters, and outputs.
+
+## scenario: pass-through
+
+Each event is passed through to all subscribers with no translation.
 
 Create a publish endpoint with a description and a set of tags:
 
@@ -52,7 +58,8 @@ Create a publish endpoint with a description and a set of tags:
     
     "d15db67d-e55a-447a-a104-9df1cc08509e"
 
-Create a subscription for all alerts:
+Create a subscription that will forward all events of type `zabbix` tagged with
+`alerts` to a configured endpoint:
 
     # curl -is \
         -X POST \
@@ -109,9 +116,91 @@ The callback URL given for the subscription will receive the request:
     
     {"type":"cpu","message":"the cpu is too damn high!"}
 
-Any number of subscriptions can exist for any set of tags.  Publishing can also
-be done via a GET, in which case the query parameters will be converted to a
-JSON object.
+
+## scenario: convert using subscriber modules
+
+Create a publish endpoint with a description and a set of tags:
+
+    # curl -is \
+        -X POST \
+        -H 'Content-Type: application/json' \
+        -d '{
+            "description":"my first publish endpoint",
+            "type": "zabbix",
+            "tags":["alerts", "env:prod"]
+        }' \
+        http://localhost:7000/endpoint
+    
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+    Content-Length: 38
+    Date: Sun, 16 Jun 2013 22:15:47 GMT
+    Connection: keep-alive
+    
+    "d15db67d-e55a-447a-a104-9df1cc08509e"
+
+Register the `zabbix-to-hubot-say` module as a subscriber, which will publish
+new events with a type of `hubot-say`:
+
+    # curl -is \
+        -X POST \
+        -H 'Content-Type: application/json' \
+        -d '{
+            "description":"convert zabbix alerts to hubot-say types",
+            "type": "zabbix",
+            "handler": {
+                "name": "zabbix-to-hubot-say"
+            }
+        }' \
+        http://localhost:7000/subscription
+
+Register the `hubot-say` module as a subscriber; it will send a `GET` request to
+the configured URL, which should be the handler for [hubot-say][hubotsay] in
+your hubot instance:
+
+    # curl -is \
+        -X POST \
+        -H 'Content-Type: application/json' \
+        -d '{
+            "description":"have hubot say stuff",
+            "type": "hubot-say",
+            "handler": {
+                "name": "hubot-say",
+                "config": {
+                    "hubot_url": "http://my.hubot.local/say"
+                }
+            }
+        }' \
+        http://localhost:7000/subscription
+
+Now post an alert in the format that your Zabbix server should; you should see
+the `trigger.name` value show up in the room Hubot's in:
+
+    # curl -is \
+        -X POST \
+        -H 'Content-Type: application/json' \
+        -d '{
+            "trigger": {
+                "name": "Low free disk space on my-troublesome-host volume /",
+                "severity": "High",
+                "status": "PROBLEM"
+            },
+            "items": [
+                {
+                    "host": "my-troublesome-host",
+                    "id": "130812",
+                    "key": "vfs.fs.size[/,pfree]",
+                    "name": "Free disk space on / in %",
+                    "value": "10 %"
+                }
+            ]
+        }' \
+        http://localhost:7000/publish/d15db67d-e55a-447a-a104-9df1cc08509e
+
+## custom subscriber modules
+
+Check out the examples in [`lib/subscribers`](lib/subscribers).  They're
+registered by relative module name in `handler.name`.
 
 ## routes
 
@@ -134,3 +223,4 @@ An unsecured Redis instance running on `localhost:6379`, for persistence.
 [Zabbix]: http://www.zabbix.com
 [Hubot]: http://hubot.github.com
 [Pagerduty]: http://www.pagerduty.com
+[hubotsay]: https://github.com/github/hubot-scripts/blob/master/src/scripts/http-say.coffee
