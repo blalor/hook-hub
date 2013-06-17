@@ -56,7 +56,12 @@ Create a subscription for all alerts:
         -d '{
             "description":"all alerts",
             "tags":["alerts"],
-            "callback": "http://requestb.in/13j7v3d1"
+            "handler": {
+                "name": "pass-through",
+                "config": {
+                    "callback": "http://requestb.in/13j7v3d1"
+                }
+            }
         }' \
         http://localhost:7000/subscription
     
