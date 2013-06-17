@@ -1,6 +1,6 @@
 {
     "name": "hook-hub",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "A hub for webhooks",
     "main": "main.js",
     "scripts": {
