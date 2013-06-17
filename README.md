@@ -37,7 +37,11 @@ Create a publish endpoint with a description and a set of tags:
     # curl -is \
         -X POST \
         -H 'Content-Type: application/json' \
-        -d '{"description":"my first publish endpoint", "tags":["alerts", "env:prod"]}' \
+        -d '{
+            "description":"my first publish endpoint",
+            "type": "zabbix",
+            "tags":["alerts", "env:prod"]
+        }' \
         http://localhost:7000/endpoint
     
     HTTP/1.1 200 OK
@@ -54,7 +58,8 @@ Create a subscription for all alerts:
         -X POST \
         -H 'Content-Type: application/json' \
         -d '{
-            "description":"all alerts",
+            "description":"zabbix alerts",
+            "type": "zabbix",
             "tags":["alerts"],
             "handler": {
                 "name": "pass-through",
