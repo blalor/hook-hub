@@ -58,7 +58,8 @@ Create a subscription for all alerts:
         -X POST \
         -H 'Content-Type: application/json' \
         -d '{
-            "description":"all alerts",
+            "description":"zabbix alerts",
+            "type": "zabbix",
             "tags":["alerts"],
             "handler": {
                 "name": "pass-through",
