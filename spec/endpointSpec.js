@@ -1,5 +1,3 @@
-/* jshint globalstrict: true */
-/* global require:true, describe: true, beforeEach: true, createSpyObj: true, it: true, expect: true */
 "use strict";
 
 var bunyan = require("bunyan");
@@ -9,7 +7,6 @@ var EndpointDAO = require("../lib/daos/endpoint").EndpointDAO;
 describe("endpoint dao", function() {
     var dbMock;
     var dao;
-    var log;
     
     beforeEach(function() {
         dbMock = createSpyObj("redis", [

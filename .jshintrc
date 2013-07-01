@@ -1,0 +1,18 @@
+{
+    "quotmark": true,
+    "node": true,
+    "strict": true,
+    "globalstrict": true,
+    "unused": true,
+    "predef": [
+        "jasmine",
+        "runs",
+        "waitsFor",
+        "describe",
+        "beforeEach",
+        "afterEach",
+        "createSpyObj",
+        "it",
+        "expect"
+    ]
+}

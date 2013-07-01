@@ -1,5 +1,3 @@
-/* jshint globalstrict: true */
-/* global require:true, describe: true, beforeEach: true, createSpyObj: true, it: true, expect: true */
 "use strict";
 
 var bunyan = require("bunyan");
