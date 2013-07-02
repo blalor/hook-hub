@@ -4,7 +4,7 @@
   "description": "A hub for webhooks",
   "scripts": {
     "start": "node server.js | node_modules/.bin/bunyan",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha -R spec spec/"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,9 @@
     "restify": "2.5.1"
   },
   "devDependencies": {
-    "jasmine-node": "1.9.1",
-    "jshint": "~2.1.4"
+    "mocha": "1.12.0",
+    "jshint": "2.1.4",
+    "sinon": "1.7.3",
+    "expect.js": "0.2.0"
   }
 }

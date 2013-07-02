@@ -1,6 +1,9 @@
 "use strict";
 
 var bunyan = require("bunyan");
+var expect = require("expect.js");
+var sinon  = require("sinon");
+var assert = require("assert");
 
 var EndpointDAO = require("../lib/daos/endpoint").EndpointDAO;
 
@@ -9,24 +12,20 @@ describe("endpoint dao", function() {
     var dao;
     
     beforeEach(function() {
-        dbMock = createSpyObj("redis", [
-            "hmset",
-            "hgetall",
-            "keys"
-        ]);
+        dbMock = {};
         
         dao = new EndpointDAO(
             dbMock,
-            bunyan.createLogger({name: "endpoint", level: "warn"})
+            bunyan.createLogger({name: "endpoint", level: "fatal"})
         );
     });
     
     it("should save to redis", function(done) {
-        dbMock.hmset.andCallFake(function(key, val, cb) {
-            expect(key).toMatch(/^hookhub:endpoint:/);
-            expect(val.description).toEqual("desc");
-            expect(val.type).toEqual("type");
-            expect(val.tags).toEqual("tag1\0tag2");
+        dbMock.hmset = sinon.spy(function(key, val, cb) {
+            expect(key).to.match(/^hookhub:endpoint:/);
+            expect(val.description).to.be("desc");
+            expect(val.type).to.be("type");
+            expect(val.tags).to.be("tag1\0tag2");
             
             cb();
         });
@@ -34,15 +33,16 @@ describe("endpoint dao", function() {
         dao
             .create("desc", "type", ["tag1", "tag2"])
             .then(function(id) {
-                expect(id).toBeDefined();
-                
-                done();
-            });
+                assert(dbMock.hmset.calledOnce);
+
+                expect(id).to.be.a("string");
+            })
+            .done(done, done);
     });
     
     it("should retrieve a value from redis", function(done) {
-        dbMock.hgetall.andCallFake(function(key, cb) {
-            expect(key).toBe("hookhub:endpoint:someId");
+        dbMock.hgetall = sinon.spy(function(key, cb) {
+            expect(key).to.be("hookhub:endpoint:someId");
             
             cb(null, {
                 description: "desc",
@@ -54,13 +54,14 @@ describe("endpoint dao", function() {
         dao
             .get("someId")
             .then(function(result) {
-                expect(result.description).toBe("desc");
-                expect(result.type).toBe("type");
-                expect(result.tags.length).toBe(2);
-                expect(result.tags[0]).toBe("tag1");
-                expect(result.tags[1]).toBe("tag2");
-                
-                done();
-            });
+                assert(dbMock.hgetall.calledOnce);
+
+                expect(result.description).to.be("desc");
+                expect(result.type).to.be("type");
+                expect(result.tags.length).to.be(2);
+                expect(result.tags[0]).to.be("tag1");
+                expect(result.tags[1]).to.be("tag2");
+            })
+            .done(done, done);
     });
 });
