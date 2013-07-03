@@ -202,6 +202,41 @@ the `trigger.name` value show up in the room Hubot's in:
 Check out the examples in [`lib/subscribers`](lib/subscribers).  They're
 registered by relative module name in `handler.name`.
 
+## ad-hoc reformatting
+
+This is dangerous as hell, but I've tried to make it safe.  The `transmogrify`
+handler will execute arbitrary JavaScript in a [sandbox][sandcastle].  The only
+function available is `publish(type, tags, data)`.  You can use it to generate
+one or more events from a matched input.
+
+Assume the following event is published with the `foo` type:
+
+    { bar: "baz" }
+
+Now create a subscription:
+
+    {
+        "description": "sample transmogrifier",
+        "tags": [],
+        "type": "foo",
+        "handler": {
+            "name": "transmogrify",
+            "config": {
+                "script": "function(sub_tags, pub_tags, data) { publish(\"doeet\", pub_tags, { message: data.bar }); }"
+            }
+        }
+    }
+
+This will result in a new event being published with type `doeet` and 
+`{ message: "baz" }` for the payload, and carrying along any tags provided by
+the original publisher.
+
+The evaulated JavaScript should be completely sandboxed and is unable to call
+`require`, `console.log`, `setTimeout` or pretty much anything else you might
+find in a normal JavaScript environment, so it's pretty safe.  Plus any script
+that takes longer than 5 seconds will be terminated.  Please note the wiggle
+words in this paragraph.  You've been warned.
+
 ## routes
 
 * `POST /endpoint` -- create a new endpoint
@@ -224,3 +259,4 @@ An unsecured Redis instance running on `localhost:6379`, for persistence.
 [Hubot]: http://hubot.github.com
 [Pagerduty]: http://www.pagerduty.com
 [hubotsay]: https://github.com/github/hubot-scripts/blob/master/src/scripts/http-say.coffee
+[sandcastle]: https://github.com/bcoe/sandcastle
