@@ -25,7 +25,8 @@
     "q": "0.9.4",
     "redis": "0.8.3",
     "restify": "2.5.1",
-    "sandcastle": "git+https://github.com/blalor/sandcastle.git#c0a58ff60cba790105a4243a978ad48fc0a4b9cc"
+    "sandcastle": "git+https://github.com/blalor/sandcastle.git#c0a58ff60cba790105a4243a978ad48fc0a4b9cc",
+    "forever": "~0.10.8"
   },
   "devDependencies": {
     "mocha": "1.12.0",
