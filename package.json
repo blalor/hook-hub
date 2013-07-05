@@ -16,7 +16,11 @@
     "subscribe",
     "rest"
   ],
-  "author": "Brian Lalor <blalor@bravo5.org>",
+  "author": {
+    "name": "Brian Lalor",
+    "email": "blalor@bravo5.org",
+    "url": "https://github.com/blalor"
+  },
   "dependencies": {
     "assert-plus": "0.1.2",
     "bunyan": "0.21.3",
@@ -29,9 +33,9 @@
     "sandcastle": "git+https://github.com/bcoe/sandcastle.git#8763e45a62e164b3b0e0eea65aff5bf52bb1bde7"
   },
   "devDependencies": {
-    "mocha": "1.12.0",
+    "expect.js": "0.2.0",
     "jshint": "2.1.4",
-    "sinon": "1.7.3",
-    "expect.js": "0.2.0"
+    "mocha": "1.12.0",
+    "sinon": "1.7.3"
   }
 }
