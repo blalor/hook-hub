@@ -8,7 +8,7 @@ pub/sub tools available, but some were too complicated and/or heavy
 ([PubSubHubbub][PuSH]), and others were too tied to their own standards
 ([Faye][Faye]).  What I *really* want is an open-source version of
 [Zapier][Zapier] or [IFTTT][IFTTT], and Hook-Hub can eventually grow into that.
-Requests submitted (via `POST` or `GET`) to a publish endpoint are `POST`ed to
+Requests submitted (via `POST` or `GET`) to a publish endpoint are fed to
 pluggable subscribers. Subscribers can then interface natively with other
 services, reformat and republish to other webhooks, etc.
 
@@ -139,14 +139,14 @@ Create a publish endpoint with a description and a set of tags:
     
     "d15db67d-e55a-447a-a104-9df1cc08509e"
 
-Register the `zabbix-to-hubot-say` module as a subscriber, which will publish
+Register the `zabbix-to-hubot-say` module as a subscriber, which will in turn publish
 new events with a type of `hubot-say`:
 
     # curl -is \
         -X POST \
         -H 'Content-Type: application/json' \
         -d '{
-            "description":"convert zabbix alerts to hubot-say types",
+            "description": "convert zabbix alerts to hubot-say types",
             "type": "zabbix",
             "handler": {
                 "name": "zabbix-to-hubot-say"
@@ -260,3 +260,4 @@ An unsecured Redis instance running on `localhost:6379`, for persistence.
 [Pagerduty]: http://www.pagerduty.com
 [hubotsay]: https://github.com/github/hubot-scripts/blob/master/src/scripts/http-say.coffee
 [sandcastle]: https://github.com/bcoe/sandcastle
+[logstash]: http://logstash.net
