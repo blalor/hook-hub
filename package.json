@@ -4,7 +4,7 @@
   "description": "A hub for webhooks",
   "scripts": {
     "start": "node server.js | node_modules/.bin/bunyan",
-    "test": "node_modules/.bin/mocha -R spec spec/"
+    "test": "mocha --recursive -R spec spec/"
   },
   "repository": {
     "type": "git",

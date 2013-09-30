@@ -6,7 +6,7 @@ var Q      = require("q");
 var sinon  = require("sinon");
 var expect = require("expect.js");
 
-var SubscriptionDAO = require("../lib/daos/subscription").SubscriptionDAO;
+var SubscriptionDAO = require("../../lib/daos/subscription").SubscriptionDAO;
 
 describe("transmogrify subscriber", function() {
     var dbMock;
