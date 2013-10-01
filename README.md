@@ -2,6 +2,8 @@
 
 A simple pub/sub hub for webhooks.
 
+[![Build Status](https://travis-ci.org/blalor/hook-hub.png?branch=master)](https://travis-ci.org/blalor/hook-hub)
+
 I needed a relatively generic way to connect disparate systems via webhooks, but
 couldn't find anything that already existed.  There are some really interesting
 pub/sub tools available, but some were too complicated and/or heavy
