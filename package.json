@@ -30,12 +30,14 @@
     "q": "0.9.4",
     "redis": "0.8.3",
     "restify": "2.5.1",
-    "sandcastle": "git+https://github.com/bcoe/sandcastle.git#8763e45a62e164b3b0e0eea65aff5bf52bb1bde7"
+    "sandcastle": "git+https://github.com/bcoe/sandcastle.git#8763e45a62e164b3b0e0eea65aff5bf52bb1bde7",
+    "request": "~2.27.0"
   },
   "devDependencies": {
     "expect.js": "0.2.0",
     "jshint": "2.1.4",
     "mocha": "1.12.0",
-    "sinon": "1.7.3"
+    "sinon": "1.7.3",
+    "chai": "~1.8.0"
   }
 }
