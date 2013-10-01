@@ -5,7 +5,7 @@ var expect = require("expect.js");
 var sinon  = require("sinon");
 var assert = require("assert");
 
-var EndpointDAO = require("../lib/daos/endpoint").EndpointDAO;
+var EndpointDAO = require("../../lib/daos/endpoint").EndpointDAO;
 
 describe("endpoint dao", function() {
     var dbMock;

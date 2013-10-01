@@ -5,7 +5,7 @@ var expect = require("expect.js");
 var sinon  = require("sinon");
 var assert = require("assert");
 
-var SubscriptionDAO = require("../lib/daos/subscription").SubscriptionDAO;
+var SubscriptionDAO = require("../../lib/daos/subscription").SubscriptionDAO;
 
 describe("subscription dao", function() {
     var dbMock;
