@@ -121,6 +121,7 @@ describe("pass-through subscriber", function() {
                 log: log.child({restify: true, level: "fatal"})
             });
             
+            restServer.use(restify.queryParser({ mapParams: false }));
             restServer.use(restify.jsonBodyParser()); // req.body
 
             restServer.listen(0, deferred.resolve);
@@ -182,7 +183,7 @@ describe("pass-through subscriber", function() {
             var deferred = Q.defer();
 
             restServer.get("/", function(req, res, next) {
-                deferred.resolve(req.body);
+                deferred.resolve(req);
                 
                 res.send(204);
                 next();
@@ -207,8 +208,8 @@ describe("pass-through subscriber", function() {
             // otherwise, if done in the body of the request handler, restify will
             // log it.
             deferred.promise
-                .then(function(body) {
-                    expect(body).to.eql(payload);
+                .then(function(req) {
+                    expect(req.query).to.eql(payload);
                 })
                 .done(function() {
                     done();
@@ -220,7 +221,7 @@ describe("pass-through subscriber", function() {
             var deferred = Q.defer();
 
             restServer.post("/" + extra_path_bits, function(req, res, next) {
-                deferred.resolve(req.body);
+                deferred.resolve(req);
                 
                 res.send(204);
                 next();
@@ -250,8 +251,8 @@ describe("pass-through subscriber", function() {
             // otherwise, if done in the body of the request handler, restify will
             // log it.
             deferred.promise
-                .then(function(body) {
-                    expect(body).to.eql(payload);
+                .then(function(req) {
+                    expect(req.body).to.eql(payload);
                 })
                 .done(function() {
                     done();
@@ -263,7 +264,7 @@ describe("pass-through subscriber", function() {
             var deferred = Q.defer();
 
             restServer.get("/" + extra_path_bits, function(req, res, next) {
-                deferred.resolve(req.body);
+                deferred.resolve(req);
                 
                 res.send(204);
                 next();
@@ -294,8 +295,8 @@ describe("pass-through subscriber", function() {
             // otherwise, if done in the body of the request handler, restify will
             // log it.
             deferred.promise
-                .then(function(body) {
-                    expect(body).to.eql(payload);
+                .then(function(req) {
+                    expect(req.query).to.eql(payload);
                 })
                 .done(function() {
                     done();
