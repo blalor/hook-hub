@@ -36,9 +36,9 @@
     "node-uuid": "1.4.0",
     "q": "0.9.4",
     "redis": "0.8.3",
+    "request": "2.27.0",
     "restify": "2.5.1",
-    "sandcastle": "git+https://github.com/bcoe/sandcastle.git#8763e45a62e164b3b0e0eea65aff5bf52bb1bde7",
-    "request": "~2.27.0"
+    "sandcastle": "0.1.0"
   },
   "devDependencies": {
     "chai": "1.8.0",
