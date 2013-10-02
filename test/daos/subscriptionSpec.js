@@ -1,7 +1,7 @@
 "use strict";
 
 var bunyan = require("bunyan");
-var expect = require("expect.js");
+var expect = require("chai").expect;
 var sinon  = require("sinon");
 var assert = require("assert");
 
@@ -35,18 +35,18 @@ describe("subscription dao", function() {
             expect(key).to.match(/^hookhub:subscription:/);
             subId = key.split(":")[2];
             
-            expect(val.type).to.be("type");
-            expect(val.description).to.be("desc");
-            expect(val.handler_name).to.be(handler.name);
+            expect(val.type).to.equal("type");
+            expect(val.description).to.equal("desc");
+            expect(val.handler_name).to.equal(handler.name);
             expect(JSON.parse(val.handler_config)).to.eql(handler.config);
-            expect(val.tags).to.be("tag1\0tag2");
+            expect(val.tags).to.equal("tag1\0tag2");
             
             cb();
         });
 
         dbMock.sadd = sinon.spy(function(key, val, cb) {
-            expect(key).to.be("hookhub:sub_type:type");
-            expect(val).to.be(subId);
+            expect(key).to.equal("hookhub:sub_type:type");
+            expect(val).to.equal(subId);
             
             cb();
         });
@@ -54,7 +54,7 @@ describe("subscription dao", function() {
         dao
             .create("type", "desc", handler, ["tag1", "tag2"])
             .then(function(id) {
-                expect(id).to.be(subId);
+                expect(id).to.equal(subId);
                 
                 assert(dbMock.hmset.calledOnce);
                 assert(dbMock.sadd.calledOnce);
@@ -68,7 +68,7 @@ describe("subscription dao", function() {
         };
         
         dbMock.hgetall = sinon.spy(function(key, cb) {
-            expect(key).to.be("hookhub:subscription:someId");
+            expect(key).to.equal("hookhub:subscription:someId");
             
             cb(null, {
                 tags: "tag1\0tag2",
@@ -82,11 +82,11 @@ describe("subscription dao", function() {
             .then(function(result) {
                 var val = result.valueOf();
 
-                expect(val.tags.length).to.be(2);
-                expect(val.tags[0]).to.be("tag1");
-                expect(val.tags[1]).to.be("tag2");
+                expect(val.tags.length).to.equal(2);
+                expect(val.tags[0]).to.equal("tag1");
+                expect(val.tags[1]).to.equal("tag2");
 
-                expect(val.handler_name).to.be("pass-through");
+                expect(val.handler_name).to.equal("pass-through");
                 expect(val.handler_config).to.eql(handler_config);
                 
                 assert(dbMock.hgetall.calledOnce);
@@ -99,7 +99,7 @@ describe("subscription dao", function() {
         var subId = "someSubId";
         
         dbMock.smembers = sinon.spy(function(key, cb) {
-            expect(key).to.be("hookhub:sub_type:" + type);
+            expect(key).to.equal("hookhub:sub_type:" + type);
             
             cb(null, [subId]);
         });
@@ -117,8 +117,8 @@ describe("subscription dao", function() {
         dao
             .getByTypeAndTags(type, [])
             .then(function(subs) {
-                expect(subs.length).to.be(1);
-                expect(subs[0].valueOf().id).to.be(subId);
+                expect(subs.length).to.equal(1);
+                expect(subs[0].valueOf().id).to.equal(subId);
                 
                 assert(dbMock.smembers.calledOnce);
                 assert(dbMock.hgetall.calledOnce);
@@ -131,7 +131,7 @@ describe("subscription dao", function() {
         var subId = "someSubId";
         
         dbMock.smembers = sinon.spy(function(key, cb) {
-            expect(key).to.be("hookhub:sub_type:" + type);
+            expect(key).to.equal("hookhub:sub_type:" + type);
             
             cb(null, [subId]);
         });
@@ -149,8 +149,8 @@ describe("subscription dao", function() {
         dao
             .getByTypeAndTags(type, ["tag1"])
             .then(function(subs) {
-                expect(subs.length).to.be(1);
-                expect(subs[0].valueOf().id).to.be(subId);
+                expect(subs.length).to.equal(1);
+                expect(subs[0].valueOf().id).to.equal(subId);
                 
                 assert(dbMock.smembers.calledOnce);
                 assert(dbMock.hgetall.calledOnce);
@@ -163,7 +163,7 @@ describe("subscription dao", function() {
         var subId = "someSubId";
         
         dbMock.smembers = sinon.spy(function(key, cb) {
-            expect(key).to.be("hookhub:sub_type:" + type);
+            expect(key).to.equal("hookhub:sub_type:" + type);
             
             cb(null, [subId]);
         });
@@ -181,7 +181,7 @@ describe("subscription dao", function() {
         dao
             .getByTypeAndTags(type, ["tag1"])
             .then(function(subs) {
-                expect(subs.length).to.be(0);
+                expect(subs.length).to.equal(0);
                 
                 assert(dbMock.smembers.calledOnce);
                 assert(dbMock.hgetall.calledOnce);
@@ -204,14 +204,14 @@ describe("subscription dao", function() {
         });
         
         dbMock.srem = sinon.spy(function(key, val, cb) {
-            expect(key).to.be("hookhub:sub_type:" + type);
-            expect(val).to.be(subId);
+            expect(key).to.equal("hookhub:sub_type:" + type);
+            expect(val).to.equal(subId);
             
             cb();
         });
         
         dbMock.del = sinon.spy(function(key, cb) {
-            expect(key).to.be("hookhub:subscription:" + subId);
+            expect(key).to.equal("hookhub:subscription:" + subId);
             
             cb();
         });

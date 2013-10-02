@@ -4,7 +4,7 @@ var assert = require("assert-plus");
 var bunyan = require("bunyan");
 var Q      = require("q");
 var sinon  = require("sinon");
-var expect = require("expect.js");
+var expect = require("chai").expect;
 
 var SubscriptionDAO = require("../../lib/daos/subscription").SubscriptionDAO;
 
@@ -25,7 +25,7 @@ describe("transmogrify subscriber", function() {
     // This ensures the module gets loaded and verify() is called.
     it("creates a mogrification subscription", function(done) {
         dbMock.hmset = sinon.spy(function(key, val, cb) {
-            expect(val.type).to.be("mogrifier");
+            expect(val.type).to.equal("mogrifier");
             
             cb();
         });

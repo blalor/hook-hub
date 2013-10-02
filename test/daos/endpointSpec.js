@@ -1,7 +1,7 @@
 "use strict";
 
 var bunyan = require("bunyan");
-var expect = require("expect.js");
+var expect = require("chai").expect;
 var sinon  = require("sinon");
 var assert = require("assert");
 
@@ -23,9 +23,9 @@ describe("endpoint dao", function() {
     it("should save to redis", function(done) {
         dbMock.hmset = sinon.spy(function(key, val, cb) {
             expect(key).to.match(/^hookhub:endpoint:/);
-            expect(val.description).to.be("desc");
-            expect(val.type).to.be("type");
-            expect(val.tags).to.be("tag1\0tag2");
+            expect(val.description).to.equal("desc");
+            expect(val.type).to.equal("type");
+            expect(val.tags).to.equal("tag1\0tag2");
             
             cb();
         });
@@ -42,7 +42,7 @@ describe("endpoint dao", function() {
     
     it("should retrieve a value from redis", function(done) {
         dbMock.hgetall = sinon.spy(function(key, cb) {
-            expect(key).to.be("hookhub:endpoint:someId");
+            expect(key).to.equal("hookhub:endpoint:someId");
             
             cb(null, {
                 description: "desc",
@@ -56,11 +56,11 @@ describe("endpoint dao", function() {
             .then(function(result) {
                 assert(dbMock.hgetall.calledOnce);
 
-                expect(result.description).to.be("desc");
-                expect(result.type).to.be("type");
-                expect(result.tags.length).to.be(2);
-                expect(result.tags[0]).to.be("tag1");
-                expect(result.tags[1]).to.be("tag2");
+                expect(result.description).to.equal("desc");
+                expect(result.type).to.equal("type");
+                expect(result.tags.length).to.equal(2);
+                expect(result.tags[0]).to.equal("tag1");
+                expect(result.tags[1]).to.equal("tag2");
             })
             .done(done, done);
     });
