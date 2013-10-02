@@ -21,6 +21,13 @@
     "email": "blalor@bravo5.org",
     "url": "https://github.com/blalor"
   },
+  "contributors": [
+    {
+      "name": "Nick Lloyd",
+      "email": "nlloyd@gmail.com",
+      "url": "https://github.com/nlloyd"
+    }
+  ],
   "dependencies": {
     "assert-plus": "0.1.2",
     "bunyan": "0.21.3",
