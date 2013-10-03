@@ -2,10 +2,6 @@
   "name": "hook-hub",
   "version": "0.1.0",
   "description": "A hub for webhooks",
-  "scripts": {
-    "start": "node server.js | node_modules/.bin/bunyan",
-    "test": "mocha"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/blalor/hook-hub.git"
@@ -28,6 +24,13 @@
       "url": "https://github.com/nlloyd"
     }
   ],
+  "scripts": {
+    "start": "node server.js | node_modules/.bin/bunyan",
+    "test": "grunt test"
+  },
+  "bin": {
+    "hook-hub": "./bin/run_forever"
+  },
   "dependencies": {
     "assert-plus": "0.1.2",
     "bunyan": "0.21.3",
@@ -42,9 +45,17 @@
   },
   "devDependencies": {
     "chai": "1.8.0",
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.9",
+    "grunt-contrib-clean": "0.5.0",
+    "grunt-contrib-jshint": "0.6.4",
+    "grunt-mocha-test": "0.7.0",
+    "grunt-prepare-install": "0.1.1",
+    "grunt-release": "0.6.0",
     "jshint": "2.1.4",
     "mocha": "1.12.0",
     "portfinder": "0.2.1",
-    "sinon": "1.7.3"
+    "sinon": "1.7.3",
+    "time-grunt": "0.1.1"
   }
 }

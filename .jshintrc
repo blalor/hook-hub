@@ -1,13 +1,25 @@
 {
-    "quotmark": true,
+    "curly": true,
+    "immed": true,
+    "indent": 4,
+    "latedef": "nofunc",
+    "newcap": true,
+    "noarg": true,
     "node": true,
+    "quotmark": true,
     "strict": true,
-    "globalstrict": true,
+    "undef": true,
     "unused": true,
-    "predef": [
-        "describe",
-        "beforeEach",
-        "afterEach",
-        "it"
-    ]
+    "-W015": true,
+    "globals": {
+        "runs": true,
+        "waitsFor": true,
+        "describe": true,
+        "before": true,
+        "beforeEach": true,
+        "afterEach": true,
+        "after": true,
+        "it": true,
+        "xit": true
+    }
 }

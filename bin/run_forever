@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+// starts hook-hub via forever.
+// yes, I know this is kludgy as hell.
+
+var execFile = require("child_process").execFile;
+var fs = require("fs");
+var path = require("path");
+
+var forever = path.resolve(fs.realpathSync(process.argv[1]), "../../node_modules/.bin/forever");
+
+execFile(forever, [ "start", "server.js" ]);
