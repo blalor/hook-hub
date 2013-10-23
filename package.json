@@ -57,5 +57,8 @@
     "portfinder": "0.2.1",
     "sinon": "1.7.3",
     "time-grunt": "0.1.1"
+  },
+  "scripts": {
+    "tar-package": "grunt tar-package"
   }
 }

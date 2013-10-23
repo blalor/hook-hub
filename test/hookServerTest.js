@@ -1,4 +1,6 @@
 "use strict";
+// below is set to tell jshint to ignore the chaijs expect(something).to.be.null; lines
+/*jshint expr: true*/
 
 var bunyan = require("bunyan");
 var portfinder = require("portfinder");
@@ -46,7 +48,7 @@ describe("hook server", function() {
     it("accepts published POST data with extra path info", function(done) {
         mockEndpointDao.get = function() {
             // return a mock endpoint
-            return Q({
+            return new Q({
                 type: "whatever",
                 tags: []
             });
@@ -54,7 +56,7 @@ describe("hook server", function() {
         
         mockSubscriptionDao.getByTypeAndTags = function() {
             // return an empty list of subscriptions
-            return Q([]);
+            return new Q([]);
         };
         
         request.post({
@@ -62,7 +64,7 @@ describe("hook server", function() {
             json: {
                 foo: "bar"
             }
-        }, function(err, resp, body) {
+        }, function(err, resp) {
             expect(err).to.be.null;
             expect(resp.statusCode).to.equal(204);
             
@@ -73,7 +75,7 @@ describe("hook server", function() {
     it("accepts published POST data without extra path info", function(done) {
         mockEndpointDao.get = function() {
             // return a mock endpoint
-            return Q({
+            return new Q({
                 type: "whatever",
                 tags: []
             });
@@ -81,7 +83,7 @@ describe("hook server", function() {
         
         mockSubscriptionDao.getByTypeAndTags = function() {
             // return an empty list of subscriptions
-            return Q([]);
+            return new Q([]);
         };
 
         request.post({
