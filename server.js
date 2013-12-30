@@ -17,7 +17,11 @@ var log = bunyan.createLogger({
 // don't start listening until the database is ready for connections
 var dbConnPromise = Q.defer();
 
-var db = redis.createClient();
+var db = redis.createClient(
+    process.env.DB_PORT_6379_TCP_PORT || 6379,
+    process.env.DB_PORT_6379_TCP_ADDR || "127.0.0.1"
+);
+
 db.on("ready", dbConnPromise.resolve);
 db.on("error", dbConnPromise.reject);
 
